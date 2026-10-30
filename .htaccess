@@ -1,0 +1,24 @@
+# Prevent directory listing
+Options -Indexes
+
+# Protect config and logs directories
+<IfModule mod_authz_core.c>
+    <FilesMatch "^(database|bootstrap)\.php$">
+        Require all denied
+    </FilesMatch>
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteRule ^config/ - [F,L]
+        RewriteRule ^logs/ - [F,L]
+    </IfModule>
+</IfModule>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Default charset
+AddDefaultCharset UTF-8
